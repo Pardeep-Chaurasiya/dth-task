@@ -11,8 +11,8 @@ router.post(
   authController.register
 );
 
-// // login user route
-// router.post("/login", joi_validator.validateLogin, authController.login);
+// login user route
+router.post("/login", joi_validator.validateLogin, authController.login);
 
 // // send otp route
 // router.post(

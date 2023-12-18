@@ -5,7 +5,7 @@ const { User } = require("../models");
 
 // register user controller
 const register = async (req, res) => {
-  const { name, email, password, cPassword, mobile_number, role } = req.body;
+  const { name, email, password, cPassword, mobileNumber, role } = req.body;
 
   try {
     if (password !== cPassword) {
@@ -20,76 +20,59 @@ const register = async (req, res) => {
     if (existingUserEmail) {
       return res.status(409).json({ message: "Email already register" });
     }
-    const existingUserMobile = await User.findOne({
-      where: { mobile_number },
-    });
-    if (existingUserMobile) {
-      return res
-        .status(409)
-        .json({ message: "Mobile Number already register" });
-    }
     const hashPassword = await bcrypt.hash(password, 10);
     await User.create({
       name,
       email,
       password: hashPassword,
-      mobile_number,
+      mobileNumber,
       role,
     });
 
-    if (role === 1)
+    if (role === "admin")
       return res.json({
-        success: true,
         message: "Admin Register Successfully",
       });
-    else if (role === 2)
+    else if (role === "operator")
       return res.json({
-        success: true,
         message: "Operator Register Successfully",
       });
-    else
-      return res.json({ success: true, message: "User Register Successfully" });
+    else return res.json({ message: "User Register Successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ success: false, error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
 // // login user controller
-// const login = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     if (!email || !password) {
-//       return res
-//         .status(422)
-//         .json({ code: "Invalid_INPUT", error: "Please fill all feilds" });
-//     }
-//     const existUserEmail = await User.findOne({ where: { email } });
-//     if (!existUserEmail) {
-//       return res
-//         .status(404)
-//         .json({ code: "Email-Not-Found", error: "Email not found" });
-//     }
-//     const pass = await bcrypt.compare(password, existUserEmail.password);
-//     if (!pass) {
-//       return res.status(400).json({ message: "Invalid Credientials" });
-//     }
-//     const AuthToken = await jwt.sign(
-//       { id: existUserEmail.id },
-//       process.env.JWT_SECRET_KEY,
-//       { expiresIn: "1d" }
-//     );
-//     const date = moment().format("MMMM Do YYYY, h:mm:ss ");
-//     return res.status(200).json({
-//       code: "Success",
-//       message: "Login successfully",
-//       AuthToken,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(400).json({ message: error.message });
-//   }
-// };
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    if (!email || !password) {
+      return res.status(422).json({ error: "Please fill all feilds" });
+    }
+    const existUserEmail = await User.findOne({ where: { email } });
+    if (!existUserEmail) {
+      return res.status(404).json({ error: "Email not found" });
+    }
+    const pass = await bcrypt.compare(password, existUserEmail.password);
+    if (!pass) {
+      return res.status(400).json({ message: "Invalid Credientials" });
+    }
+    const AuthToken = await jwt.sign(
+      { id: existUserEmail.id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1d" }
+    );
+    return res.status(200).json({
+      message: "Login successfully",
+      AuthToken,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json({ message: error.message });
+  }
+};
 
 // // forget password send otp logic controller
 // const sendSMS = async (req, res) => {
@@ -200,4 +183,4 @@ const register = async (req, res) => {
 //   }
 // };
 
-module.exports = { register };
+module.exports = { register, login };

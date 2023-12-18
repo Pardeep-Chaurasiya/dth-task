@@ -7,11 +7,13 @@ const validateRegistration = (req, res, next) => {
     password: Joi.string()
       .pattern(/^[a-zA-Z0-9]{5,30}$/)
       .required(),
-    mobile_number: Joi.number().required(),
+    mobileNumber: Joi.string()
+      .pattern(/^\d{10}$/)
+      .required(),
     cPassword: Joi.string()
       .pattern(/^[a-zA-Z0-9]{5,30}$/)
       .required(),
-    role: Joi.number(),
+    role: Joi.string(),
     active: Joi.boolean(),
   });
 
