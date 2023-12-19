@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasOne(models.Subscription, {
         foreignKey: "subscriptionId",
-        onDelete: "SET NULL", // or other onDelete action based on your requirements
+        onDelete: "SET NULL",
       });
     }
   }

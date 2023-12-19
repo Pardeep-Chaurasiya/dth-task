@@ -2,9 +2,9 @@ const Joi = require("joi");
 
 const validateAddChannel = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string(),
-    description: Joi.string(),
-    category: Joi.string(),
+    name: Joi.string().required(),
+    price: Joi.number().required(),
+    category: Joi.string().required(),
   });
 
   const { error, value } = schema.validate(req.body);

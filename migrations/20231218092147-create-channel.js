@@ -1,7 +1,9 @@
+// migrations/<timestamp>-create-channels.js
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
+const { DataTypes } = require("sequelize");
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Channels", {
       id: {
         allowNull: false,
@@ -15,8 +17,8 @@ module.exports = {
       category: {
         type: Sequelize.STRING,
       },
-      description: {
-        type: Sequelize.STRING,
+      price: {
+        type: Sequelize.DOUBLE,
       },
       createdAt: {
         allowNull: false,
@@ -28,7 +30,8 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Channels");
   },
 };

@@ -1,11 +1,12 @@
 const Joi = require("joi");
 
-const validateAddPackage = (req, res, next) => {
+const validateCreatePackage = (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string(),
     duration: Joi.string(),
     category: Joi.string(),
     price: Joi.number(),
+    channels: Joi.array().items(Joi.number()),
   });
 
   const { error, value } = schema.validate(req.body);
@@ -20,5 +21,5 @@ const validateAddPackage = (req, res, next) => {
 };
 
 module.exports = {
-  validateAddPackage,
+  validateCreatePackage,
 };

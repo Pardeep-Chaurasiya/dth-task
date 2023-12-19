@@ -1,27 +1,14 @@
 const { Channel } = require("../models");
 
 const addChannel = async (req, res) => {
-  const { name, description, category } = req.body;
+  const { name, price, category } = req.body;
 
   try {
-    if (!name) {
-      return res.status(400).json({ message: "Channel Name is required" });
-    }
-    if (!description) {
-      return res
-        .status(400)
-        .json({ message: "Channel Description is required" });
-    }
-    if (!category) {
-      return res.status(400).json({ message: "Channel Category is required" });
-    }
-
     await Channel.create({
       name,
-      description,
+      price,
       category,
     });
-
     return res.status(201).json({ message: "Channel Added Successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

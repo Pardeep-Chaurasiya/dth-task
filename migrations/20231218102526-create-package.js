@@ -1,7 +1,9 @@
+// migrations/<timestamp>-create-packages.js
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
+const { DataTypes } = require("sequelize");
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Packages", {
       id: {
         allowNull: false,
@@ -16,19 +18,20 @@ module.exports = {
         type: Sequelize.STRING,
       },
       duration: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       price: {
         type: Sequelize.INTEGER,
       },
       channelId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         references: {
           model: "Channels",
           key: "id",
           as: "channelId",
         },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
       createdAt: {
         allowNull: false,
@@ -40,7 +43,8 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Packages");
   },
 };
